@@ -98,6 +98,7 @@ baleni 5:
 ```
 
 Asile: `1`, `2`, `4`.
+
 ## Fungsi
 
 ```jna
