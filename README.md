@@ -1,7 +1,7 @@
 # JNA Language
 
 JNA (Jawa Ngapak Absurd) yaiku basa pemrograman independen karo sintaks khas
-Jawa Ngapak. Implementasi saiki ditulis nang Python (sethiké 3.8) lan mung
+Jawa Ngapak. Implementasi saiki ditulis nang Python (sethike 3.8) lan mung
 nggunakake pustaka standar, dadi bisa mlaku nang Termux / ARMv7.
 
 Dokumen iki mung njlentrehake fitur sing wis ana lan wis diimplementasikan.
@@ -92,7 +92,7 @@ gawe sapa(jeneng):
 sapa("Nendi")
 ```
 
- fungsi rekursif uga didukung:
+Fungsi rekursif uga didukung:
 
 ```jna
 gawe faktorial(n):
@@ -131,9 +131,10 @@ src/jna/
 
 ## Roadmap
 
-1. Phase 1 (core language) umume wis ana; error runtime durung kabeh
+1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Phase 2 (fungsi) wis wiwit; standard library, `takon`, break/continue
-   lan `ngaso` isih ing antrean.
-3. Doc_parser compiles durung ana; compiler bakal rampung sawise
-   interpreter stabil (deleng target di arsip proyek).
+2. Fase 2 (sistem fungsi) wis berjalan; standard library, `takon`,
+   `mandheg`, `terusna`, lan `ngaso` isih ing antrean.
+3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
+   awit saka analisis kode saiki (pyproject lan skema paket uga isih
+   kosong).
