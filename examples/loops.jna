@@ -1,0 +1,12 @@
+# Mandheg lan terusna nang baleni
+
+angka = 0
+baleni 5:
+    angka = angka + 1
+    nek angka == 3:
+        terusna
+    nek angka == 5:
+        mandheg
+    ngomong angka
+
+wis

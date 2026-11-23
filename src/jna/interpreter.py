@@ -2,7 +2,8 @@ from .parser import (
     Program, Number, String, Boolean, Null,
     Variable, Binary, Unary, Assignment,
     Print, If, Repeat, End,
-    FunctionDef, Return, Call, ExpressionStatement
+    FunctionDef, Return, Call, ExpressionStatement,
+    Break, Continue
 )
 from .runtime import Environment, RuntimeErrorJNA
 from .functions import JNAFunction
@@ -11,6 +12,14 @@ MAX_CALL_DEPTH = 100
 
 
 class StopProgram(Exception):
+    pass
+
+
+class BreakSignal(Exception):
+    pass
+
+
+class ContinueSignal(Exception):
     pass
 
 
@@ -25,6 +34,7 @@ class Interpreter:
         self.globals = Environment()
         self.environment = self.globals
         self.function_depth = 0
+        self.loop_depth = 0
 
     def run(self, program):
         try:
@@ -69,8 +79,18 @@ class Interpreter:
                     "Jumlah baleni ora kena negatif"
                 )
 
-            for _ in range(count):
-                self.execute_block(node.body)
+            self.loop_depth += 1
+
+            try:
+                for _ in range(count):
+                    try:
+                        self.execute_block(node.body)
+                    except ContinueSignal:
+                        continue
+            except BreakSignal:
+                pass
+            finally:
+                self.loop_depth -= 1
 
         elif isinstance(node, FunctionDef):
             function = JNAFunction(
@@ -93,6 +113,20 @@ class Interpreter:
                 value = self.evaluate(node.value)
 
             raise ReturnSignal(value)
+
+        elif isinstance(node, Break):
+            if self.loop_depth == 0:
+                raise RuntimeErrorJNA(
+                    "mandheg mung bisa nang njero baleni"
+                )
+            raise BreakSignal()
+
+        elif isinstance(node, Continue):
+            if self.loop_depth == 0:
+                raise RuntimeErrorJNA(
+                    "terusna mung bisa nang njero baleni"
+                )
+            raise ContinueSignal()
 
         elif isinstance(node, End):
             raise StopProgram()
@@ -123,6 +157,14 @@ class Interpreter:
 
         try:
             self.execute_block(function.body)
+        except BreakSignal:
+            raise RuntimeErrorJNA(
+                "mandheg mung bisa nang njero baleni"
+            )
+        except ContinueSignal:
+            raise RuntimeErrorJNA(
+                "terusna mung bisa nang njero baleni"
+            )
         except ReturnSignal as signal:
             result = signal.value
         else:

@@ -18,6 +18,7 @@ cd JNA-Language
 ```bash
 python -m src.jna examples/hello.jna
 python -m src.jna examples/functions.jna
+python -m src.jna examples/loops.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -36,9 +37,11 @@ Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
 | bener | Boolean bener |
 | salah | Boolean salah |
 | kosong | Nilai kosong (null) |
+| mandheg | Ngandegake baleni |
+| terusna | Nerusake nang iterasi sabanjure |
 | wis | Nggakhiri program |
 
-Kata kunci `takon`, `mandheg`, `terusna`, lan `ngaso` wis ana nang lexer
+Kata kunci `takon` lan `ngaso` wis ana nang lexer
 nanging durung diimplementasikake nang parser lan interpreter.
 
 ## Tipe data
@@ -77,6 +80,24 @@ baleni 5:
     ngomong "JNA"
 ```
 
+## Mandheg lan Terusna
+
+Nang njero `baleni`, `mandheg` ngandegake ulangan lan `terusna`
+mlumpat nang iterasi sabanjure. Kaduwe mung bisa ditulis nang njero
+`baleni` lan ora bisa nembus wates fungsi.
+
+```jna
+angka = 0
+baleni 5:
+    angka = angka + 1
+    nek angka == 3:
+        terusna
+    nek angka == 5:
+        mandheg
+    ngomong angka
+```
+
+Asile: `1`, `2`, `4`.
 ## Fungsi
 
 ```jna
@@ -133,8 +154,8 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 2 (sistem fungsi) wis berjalan; standard library, `takon`,
-   `mandheg`, `terusna`, lan `ngaso` isih ing antrean.
+2. Fase 2 (sistem fungsi) lan kontrol alur `mandheg`/`terusna` wis
+   berjalan; standard library, `takon`, lan `ngaso` isih ing antrean.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
    awit saka analisis kode saiki (pyproject lan skema paket uga isih
    kosong).

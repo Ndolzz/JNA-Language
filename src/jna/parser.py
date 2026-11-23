@@ -97,6 +97,16 @@ class ExpressionStatement:
 
 
 @dataclass
+class Break:
+    line: int = 0
+
+
+@dataclass
+class Continue:
+    line: int = 0
+
+
+@dataclass
 class End:
     pass
 
@@ -186,6 +196,12 @@ class Parser:
             if token.value == "balekna":
                 return self.return_statement()
 
+            if token.value == "mandheg":
+                return self.break_statement()
+
+            if token.value == "terusna":
+                return self.continue_statement()
+
             if token.value == "wis":
                 self.advance()
                 return End()
@@ -268,6 +284,14 @@ class Parser:
             )
 
         return FunctionDef(name, params, body, token.line)
+
+    def break_statement(self):
+        token = self.expect("KEYWORD")
+        return Break(token.line)
+
+    def continue_statement(self):
+        token = self.expect("KEYWORD")
+        return Continue(token.line)
 
     def return_statement(self):
         token = self.expect("KEYWORD")

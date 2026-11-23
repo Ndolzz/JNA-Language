@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-11-24
+
+### Ditambahake
+
+- Kontrol alur: `mandheg` (break) lan `terusna` (continue) nang njero
+  `baleni`, kalebu nested loop lan validasi penggunaan sing salah.
+- Error sing jelas yen `mandheg`/`terusna` nang njaba `baleni` utawa
+  nyoba nembus wates fungsi.
+- Contoh examples/loops.jna lan pengujian tests/test_control_flow.py.
+
 ## 2026-11-23
 
 ### Ditambahake
