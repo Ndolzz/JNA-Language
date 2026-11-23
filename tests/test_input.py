@@ -1,6 +1,7 @@
+import builtins
 import io
 import unittest
-from contextlib import redirect_stdin, redirect_stdout
+from contextlib import redirect_stdout
 
 from src.jna.lexer import tokenize
 from src.jna.parser import parse
@@ -10,41 +11,56 @@ from src.jna.runtime import RuntimeErrorJNA
 
 class TestInput(unittest.TestCase):
 
-    def execute(self, source, stdin_text=None):
+    def execute(self, source, input_lines=None):
         output = io.StringIO()
-        stdin_source = io.StringIO(stdin_text) if stdin_text is not None else io.StringIO()
+        lines = list(input_lines or [])
+        state = {"index": 0}
+        original_input = builtins.input
 
-        with redirect_stdout(output), redirect_stdin(stdin_source):
-            program = parse(tokenize(source))
-            Interpreter().run(program)
+        def fake_input(prompt=""):
+            if state["index"] >= len(lines):
+                raise EOFError
+            value = lines[state["index"]]
+            state["index"] += 1
+            output.write(prompt)
+            return value
+
+        builtins.input = fake_input
+
+        try:
+            with redirect_stdout(output):
+                program = parse(tokenize(source))
+                Interpreter().run(program)
+        finally:
+            builtins.input = original_input
 
         return output.getvalue()
 
     def test_takon_returns_string(self):
         result = self.execute(
             'jeneng = takon\nngomong jeneng\n',
-            stdin_text="Nendi\n",
+            input_lines=["Nendi"],
         )
         self.assertEqual(result, "Nendi\n")
 
     def test_takon_with_prompt(self):
         result = self.execute(
             'jeneng = takon "Siapa jenengmu?"\nngomong jeneng\n',
-            stdin_text="Nendi\n",
+            input_lines=["Nendi"],
         )
         self.assertEqual(result, "Siapa jenengmu?Nendi\n")
 
     def test_takon_value_is_string(self):
         result = self.execute(
             'umur = takon\nngomong umur + " taun"\n',
-            stdin_text="16\n",
+            input_lines=["16"],
         )
         self.assertEqual(result, "16 taun\n")
 
     def test_takon_at_end_of_input(self):
         source = 'jeneng = takon\n'
         with self.assertRaises(RuntimeErrorJNA):
-            self.execute(source, stdin_text="")
+            self.execute(source, input_lines=[])
 
     def test_ngaso_zero_completes(self):
         result = self.execute(
