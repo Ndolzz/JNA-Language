@@ -28,6 +28,10 @@ def run_file(filename):
         print(f"JNA Error: {error}", file=sys.stderr)
         return 1
 
+    except RecursionError:
+        print("JNA Error: Panggilan fungsi kejero banget", file=sys.stderr)
+        return 1
+
     except UnicodeDecodeError:
         print("JNA Error: File kudu nganggo UTF-8", file=sys.stderr)
         return 1

@@ -7,7 +7,7 @@ from .parser import (
 from .runtime import Environment, RuntimeErrorJNA
 from .functions import JNAFunction
 
-MAX_CALL_DEPTH = 200
+MAX_CALL_DEPTH = 100
 
 
 class StopProgram(Exception):

@@ -108,7 +108,7 @@ Aturan fungsi:
 2. `balekna` mung bisa ana nang njero fungsi; tanpa nilai, asile `kosong`.
 3. Variabel segera nang fungsi kapisah saka lingkup global.
 4. Panggilan fungsi bisa dadi ekspresi utawa statement dhewe.
-5. Rekursi diwatesi nganti 200 tingkat panggilan supaya metu error sing
+5. Rekursi diwatesi nganti 100 tingkat panggilan supaya metu error sing
    jelas, ora nglakokake stack Python.
 
 ## Pengujian
