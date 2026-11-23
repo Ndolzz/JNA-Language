@@ -1,0 +1,22 @@
+# Fungsi nang JNA
+
+gawe tambah(a, b):
+    balekna a + b
+
+gawe sapa(jeneng):
+    ngomong "Sugeng rawuh, " + jeneng + "!"
+
+# Fungsi rekursif
+gawe faktorial(n):
+    nek n <= 1:
+        balekna 1
+    liyane:
+        balekna n * faktorial(n - 1)
+
+asil = tambah(10, 5)
+ngomong asil
+
+sapa("Nendi")
+ngomong faktorial(5)
+
+wis

@@ -71,6 +71,32 @@ class Repeat:
 
 
 @dataclass
+class FunctionDef:
+    name: str
+    params: list
+    body: list
+    line: int = 0
+
+
+@dataclass
+class Return:
+    value: object = None
+    line: int = 0
+
+
+@dataclass
+class Call:
+    name: str
+    arguments: list
+    line: int = 0
+
+
+@dataclass
+class ExpressionStatement:
+    expression: object
+
+
+@dataclass
 class End:
     pass
 
@@ -87,6 +113,14 @@ class Parser:
 
     def current(self):
         return self.tokens[self.position]
+
+    def peek(self):
+        next_position = self.position + 1
+
+        if next_position < len(self.tokens):
+            return self.tokens[next_position]
+
+        return self.tokens[-1]
 
     def advance(self):
         token = self.current()
@@ -129,6 +163,11 @@ class Parser:
         token = self.current()
 
         if token.type == "IDENTIFIER":
+            if self.peek().type == "LPAREN":
+                self.advance()
+                expression = self.finish_call(token)
+                return ExpressionStatement(expression)
+
             return self.assignment()
 
         if token.type == "KEYWORD":
@@ -140,6 +179,12 @@ class Parser:
 
             if token.value == "baleni":
                 return self.repeat_statement()
+
+            if token.value == "gawe":
+                return self.function_statement()
+
+            if token.value == "balekna":
+                return self.return_statement()
 
             if token.value == "wis":
                 self.advance()
@@ -196,6 +241,43 @@ class Parser:
         body = self.block()
 
         return Repeat(count, body)
+
+    def function_statement(self):
+        token = self.expect("KEYWORD")
+        name = self.expect("IDENTIFIER").value
+        self.expect("LPAREN")
+
+        params = []
+
+        if self.current().type != "RPAREN":
+            params.append(self.expect("IDENTIFIER").value)
+
+            while self.match("COMMA"):
+                params.append(self.expect("IDENTIFIER").value)
+
+        self.expect("RPAREN")
+        self.expect("COLON")
+        self.expect("NEWLINE")
+
+        body = self.block()
+
+        if len(params) != len(set(params)):
+            raise ParserError(
+                f"Parameter duplikat pada fungsi '{name}' "
+                f"at line {token.line}"
+            )
+
+        return FunctionDef(name, params, body, token.line)
+
+    def return_statement(self):
+        token = self.expect("KEYWORD")
+
+        value = None
+
+        if self.current().type not in ("NEWLINE", "DEDENT", "EOF"):
+            value = self.expression()
+
+        return Return(value, token.line)
 
     def block(self):
         self.expect("INDENT")
@@ -277,6 +359,9 @@ class Parser:
             return String(token.value)
 
         if self.match("IDENTIFIER"):
+            if self.current().type == "LPAREN":
+                return self.finish_call(token)
+
             return Variable(token.value)
 
         if token.type == "KEYWORD":
@@ -301,6 +386,21 @@ class Parser:
             f"Invalid expression {token.value!r} "
             f"at line {token.line}"
         )
+
+    def finish_call(self, name_token):
+        self.expect("LPAREN")
+
+        arguments = []
+
+        if self.current().type != "RPAREN":
+            arguments.append(self.expression())
+
+            while self.match("COMMA"):
+                arguments.append(self.expression())
+
+        self.expect("RPAREN")
+
+        return Call(name_token.value, arguments, name_token.line)
 
 
 def parse(tokens):

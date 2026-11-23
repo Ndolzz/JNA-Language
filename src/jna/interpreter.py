@@ -1,18 +1,30 @@
 from .parser import (
     Program, Number, String, Boolean, Null,
     Variable, Binary, Unary, Assignment,
-    Print, If, Repeat, End
+    Print, If, Repeat, End,
+    FunctionDef, Return, Call, ExpressionStatement
 )
 from .runtime import Environment, RuntimeErrorJNA
+from .functions import JNAFunction
+
+MAX_CALL_DEPTH = 200
 
 
 class StopProgram(Exception):
     pass
 
 
+class ReturnSignal(Exception):
+    def __init__(self, value):
+        super().__init__()
+        self.value = value
+
+
 class Interpreter:
     def __init__(self):
-        self.environment = Environment()
+        self.globals = Environment()
+        self.environment = self.globals
+        self.function_depth = 0
 
     def run(self, program):
         try:
@@ -28,6 +40,9 @@ class Interpreter:
         elif isinstance(node, Assignment):
             value = self.evaluate(node.value)
             self.environment.define(node.name, value)
+
+        elif isinstance(node, ExpressionStatement):
+            self.evaluate(node.expression)
 
         elif isinstance(node, Print):
             value = self.evaluate(node.value)
@@ -57,6 +72,28 @@ class Interpreter:
             for _ in range(count):
                 self.execute_block(node.body)
 
+        elif isinstance(node, FunctionDef):
+            function = JNAFunction(
+                node.name,
+                node.params,
+                node.body,
+                self.environment
+            )
+            self.environment.define(node.name, function)
+
+        elif isinstance(node, Return):
+            if self.function_depth == 0:
+                raise RuntimeErrorJNA(
+                    "balekna mung bisa nang njero gawe"
+                )
+
+            value = None
+
+            if node.value is not None:
+                value = self.evaluate(node.value)
+
+            raise ReturnSignal(value)
+
         elif isinstance(node, End):
             raise StopProgram()
 
@@ -68,6 +105,33 @@ class Interpreter:
     def execute_block(self, statements):
         for statement in statements:
             self.execute(statement)
+
+    def call_function(self, function, arguments, line):
+        if self.function_depth >= MAX_CALL_DEPTH:
+            raise RuntimeErrorJNA(
+                f"Telpun njero fungsi kepaten "
+                f"(lewih saka {MAX_CALL_DEPTH}); "
+                "ana rekursi sing ora mandheg?"
+            )
+
+        call_environment = function.bind(arguments, line)
+
+        previous_environment = self.environment
+        self.environment = call_environment
+
+        self.function_depth += 1
+
+        try:
+            self.execute_block(function.body)
+        except ReturnSignal as signal:
+            result = signal.value
+        else:
+            result = None
+        finally:
+            self.function_depth -= 1
+            self.environment = previous_environment
+
+        return result
 
     def evaluate(self, node):
         if isinstance(node, Number):
@@ -84,6 +148,21 @@ class Interpreter:
 
         if isinstance(node, Variable):
             return self.environment.get(node.name)
+
+        if isinstance(node, Call):
+            called = self.environment.get(node.name)
+
+            if not isinstance(called, JNAFunction):
+                raise RuntimeErrorJNA(
+                    f"'{node.name}' bukan fungsi JNA"
+                )
+
+            arguments = [
+                self.evaluate(argument)
+                for argument in node.arguments
+            ]
+
+            return self.call_function(called, arguments, node.line)
 
         if isinstance(node, Unary):
             value = self.evaluate(node.operand)

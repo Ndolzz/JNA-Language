@@ -3,15 +3,21 @@ class RuntimeErrorJNA(Exception):
 
 
 class Environment:
-    def __init__(self):
+    def __init__(self, parent=None):
         self.variables = {}
+        self.parent = parent
 
     def define(self, name, value):
         self.variables[name] = value
 
     def get(self, name):
-        if name not in self.variables:
-            raise RuntimeErrorJNA(
-                f"Variabel '{name}' durung digawe"
-            )
-        return self.variables[name]
+        environment = self
+
+        while environment is not None:
+            if name in environment.variables:
+                return environment.variables[name]
+            environment = environment.parent
+
+        raise RuntimeErrorJNA(
+            f"Variabel '{name}' durung digawe"
+        )
