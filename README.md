@@ -120,6 +120,7 @@ ngomong "Nunggu sethik..."
 ngaso 2
 ngomong "Rampung"
 ```
+
 ## Fungsi
 
 ```jna
