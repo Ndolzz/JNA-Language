@@ -20,6 +20,7 @@ python -m src.jna examples/hello.jna
 python -m src.jna examples/functions.jna
 python -m src.jna examples/loops.jna
 python -m src.jna examples/input.jna
+python -m src.jna examples/stdlib.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -155,6 +156,35 @@ Aturan fungsi:
 5. Rekursi diwatesi nganti 100 tingkat panggilan supaya metu error sing
    jelas, ora nglakokake stack Python.
 
+## Standard Library
+
+Fungsi-fungsi iki wis bisa diarani kaya fungsi biasa, dhisani
+nganggo statement utawa nang njero ekspresi.
+
+| Fungsi | Gunane |
+| --- | --- |
+| dadi_teks(nilai) | Ngonversi dadi teks |
+| dadi_angka(nilai) | Ngonversi teks dadi angka |
+| dadi_bulat(nilai) | Ngonversi dadi angka bulat (mbusak bagean desimal) |
+| dadi_koma(nilai) | Ngonversi dadi angka koma |
+| dawa(teks) | Ngetang dawa teks |
+| potong(teks, wiwiti, pungkasan) | Njupuk bagean teks; pungkasan opsional |
+| ganti(teks, wingi, anyar) | Ngganti kabeh teks sing wingi dadi anyar |
+| goleki(teks, dicari) | Posisi kapisan; -1 yen ora ketemu |
+| resiki(teks) | Mbuse spasi ing pinggir teks |
+| mutlak(nilai) | Nilai absolut |
+| pangkat(dasar, pangkat) | Dasar dipangkatke |
+| bundele(nilai) | Pondhokan menyang angka paling cedhak |
+
+```jna
+ngomong dawa("Sugeng")
+ngomong dadi_angka("42") + 8
+ngomong pangkat(2, 10)
+```
+
+Argumen sing seler/type-e salah bakal metu error JNA sing jelas,
+dhisani karo nomer baris.
+
 ## Pengujian
 
 ```bash
@@ -177,9 +207,9 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 2 (sistem fungsi), kontrol alur, lan `takon`/`ngaso` wis
-   berjalan; standard library (konversi tipe, string, matematika)
-   isih ing antrean.
+2. Fase 4 wis lumayan: `takon`, `ngaso`, lan standard library pertama
+   (konversi, teks, matematika) wis ana; fungsi list lan utilitas liyane
+   isih ing antrean bareng fase list/dictionary.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
    awit saka analisis kode saiki (pyproject lan skema paket uga isih
    kosong).

@@ -7,8 +7,9 @@ from .parser import (
     FunctionDef, Return, Call, ExpressionStatement,
     Break, Continue, Takon, Ngaso
 )
-from .runtime import Environment, RuntimeErrorJNA
-from .functions import JNAFunction
+from .runtime import Environment, RuntimeErrorJNA, stringify
+from .functions import JNAFunction, NativeFunction
+from .stdlib import install_builtins
 
 MAX_CALL_DEPTH = 100
 
@@ -34,6 +35,7 @@ class ReturnSignal(Exception):
 class Interpreter:
     def __init__(self):
         self.globals = Environment()
+        install_builtins(self.globals)
         self.environment = self.globals
         self.function_depth = 0
         self.loop_depth = 0
@@ -227,17 +229,20 @@ class Interpreter:
         if isinstance(node, Call):
             called = self.environment.get(node.name)
 
-            if not isinstance(called, JNAFunction):
-                raise RuntimeErrorJNA(
-                    f"'{node.name}' bukan fungsi JNA"
-                )
-
             arguments = [
                 self.evaluate(argument)
                 for argument in node.arguments
             ]
 
-            return self.call_function(called, arguments, node.line)
+            if isinstance(called, JNAFunction):
+                return self.call_function(called, arguments, node.line)
+
+            if isinstance(called, NativeFunction):
+                return called.call(arguments, node.line)
+
+            raise RuntimeErrorJNA(
+                f"'{node.name}' bukan fungsi JNA"
+            )
 
         if isinstance(node, Unary):
             value = self.evaluate(node.operand)
@@ -329,13 +334,7 @@ class Interpreter:
 
     @staticmethod
     def stringify(value):
-        if value is True:
-            return "bener"
-        if value is False:
-            return "salah"
-        if value is None:
-            return "kosong"
-        return str(value)
+        return stringify(value)
 
 
 def interpret(program):

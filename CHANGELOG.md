@@ -12,6 +12,13 @@
   tansah string) lan `ngaso` (ngaso program, durasi kudu angka
   non-negatif).
 - Contoh examples/input.jna lan pengujian tests/test_input.py.
+- Standard library pertama (12 fungsi built-in):
+  `dadi_teks`, `dadi_angka`, `dadi_bulat`, `dadi_koma`, `dawa`,
+  `potong`, `ganti`, `goleki`, `resiki`, `mutlak`, `pangkat`, `bundele`,
+  dipasang nang environment global lan bisa dibayangi user.
+- Modul anyar: src/jna/stdlib/ (functions.py, __init__.py) lan kelas
+  NativeFunction nang src/jna/functions.py.
+- Contoh examples/stdlib.jna lan pengujian tests/test_stdlib.py.
 - Contoh examples/loops.jna lan pengujian tests/test_control_flow.py.
 
 ## 2026-11-23

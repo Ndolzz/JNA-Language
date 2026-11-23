@@ -21,3 +21,13 @@ class Environment:
         raise RuntimeErrorJNA(
             f"Variabel '{name}' durung digawe"
         )
+
+
+def stringify(value):
+    if value is True:
+        return "bener"
+    if value is False:
+        return "salah"
+    if value is None:
+        return "kosong"
+    return str(value)

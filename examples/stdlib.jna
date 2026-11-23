@@ -1,0 +1,19 @@
+# Standard library JNA
+
+teks = "  Sugeng rawuh  "
+
+ngomong dawa(resiki(teks))
+ngomong resiki(teks)
+
+angka = dadi_angka("42")
+ngomong angka + 8
+
+ngomong pangkat(2, 10)
+ngomong bundele(7.5)
+
+posisi = goleki(resiki(teks), "rawuh")
+ngomong posisi
+
+ngomong potong(resiki(teks), 0, 6)
+
+wis
