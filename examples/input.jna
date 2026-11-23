@@ -1,0 +1,10 @@
+# Takon lan ngaso
+
+jeneng = takon "Siapa jenengmu?"
+ngomong "Sugeng rawuh, " + jeneng + "!"
+
+ngomong "Nunggu sethik..."
+ngaso 2
+ngomong "Wis rampung"
+
+wis

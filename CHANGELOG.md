@@ -8,6 +8,10 @@
   `baleni`, kalebu nested loop lan validasi penggunaan sing salah.
 - Error sing jelas yen `mandheg`/`terusna` nang njaba `baleni` utawa
   nyoba nembus wates fungsi.
+- Input lan wektu: `takon` (maca input, karo prompt opsional, asile
+  tansah string) lan `ngaso` (ngaso program, durasi kudu angka
+  non-negatif).
+- Contoh examples/input.jna lan pengujian tests/test_input.py.
 - Contoh examples/loops.jna lan pengujian tests/test_control_flow.py.
 
 ## 2026-11-23

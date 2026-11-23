@@ -107,6 +107,18 @@ class Continue:
 
 
 @dataclass
+class Takon:
+    prompt: object = None
+    line: int = 0
+
+
+@dataclass
+class Ngaso:
+    duration: object
+    line: int = 0
+
+
+@dataclass
 class End:
     pass
 
@@ -201,6 +213,9 @@ class Parser:
 
             if token.value == "terusna":
                 return self.continue_statement()
+
+            if token.value == "ngaso":
+                return self.ngaso_statement()
 
             if token.value == "wis":
                 self.advance()
@@ -303,6 +318,12 @@ class Parser:
 
         return Return(value, token.line)
 
+    def ngaso_statement(self):
+        token = self.expect("KEYWORD")
+        duration = self.expression()
+
+        return Ngaso(duration, token.line)
+
     def block(self):
         self.expect("INDENT")
 
@@ -400,6 +421,16 @@ class Parser:
             if token.value == "kosong":
                 self.advance()
                 return Null()
+
+            if token.value == "takon":
+                self.advance()
+
+                prompt = None
+
+                if self.current().type == "STRING":
+                    prompt = String(self.advance().value)
+
+                return Takon(prompt, token.line)
 
         if self.match("LPAREN"):
             value = self.expression()

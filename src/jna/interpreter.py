@@ -1,9 +1,11 @@
+import time
+
 from .parser import (
     Program, Number, String, Boolean, Null,
     Variable, Binary, Unary, Assignment,
     Print, If, Repeat, End,
     FunctionDef, Return, Call, ExpressionStatement,
-    Break, Continue
+    Break, Continue, Takon, Ngaso
 )
 from .runtime import Environment, RuntimeErrorJNA
 from .functions import JNAFunction
@@ -128,6 +130,21 @@ class Interpreter:
                 )
             raise ContinueSignal()
 
+        elif isinstance(node, Ngaso):
+            duration = self.evaluate(node.duration)
+
+            if isinstance(duration, bool) or not isinstance(duration, (int, float)):
+                raise RuntimeErrorJNA(
+                    "Durasi ngaso kudu angka"
+                )
+
+            if duration < 0:
+                raise RuntimeErrorJNA(
+                    "Durasi ngaso ora kena negatif"
+                )
+
+            time.sleep(duration)
+
         elif isinstance(node, End):
             raise StopProgram()
 
@@ -190,6 +207,22 @@ class Interpreter:
 
         if isinstance(node, Variable):
             return self.environment.get(node.name)
+
+        if isinstance(node, Takon):
+            try:
+                if node.prompt is not None:
+                    prompt = self.stringify(self.evaluate(node.prompt))
+                    return input(prompt)
+
+                return input()
+            except EOFError:
+                raise RuntimeErrorJNA(
+                    "Input entek durung ana nilaine"
+                )
+            except KeyboardInterrupt:
+                raise RuntimeErrorJNA(
+                    "Input dipeksa mandheg"
+                )
 
         if isinstance(node, Call):
             called = self.environment.get(node.name)

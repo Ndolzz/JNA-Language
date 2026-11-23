@@ -19,6 +19,7 @@ cd JNA-Language
 python -m src.jna examples/hello.jna
 python -m src.jna examples/functions.jna
 python -m src.jna examples/loops.jna
+python -m src.jna examples/input.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -39,10 +40,12 @@ Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
 | kosong | Nilai kosong (null) |
 | mandheg | Ngandegake baleni |
 | terusna | Nerusake nang iterasi sabanjure |
+| takon | Nampa input saka pengguna |
+| ngaso | Ngaso sawetara wektu (detik) |
 | wis | Nggakhiri program |
 
-Kata kunci `takon` lan `ngaso` wis ana nang lexer
-nanging durung diimplementasikake nang parser lan interpreter.
+Elinga yen `takon` mesthi ngasilake teks (string); konversi tipe
+bakal dadi bagean standard library nang fase sabanjure.
 
 ## Tipe data
 
@@ -99,6 +102,24 @@ baleni 5:
 
 Asile: `1`, `2`, `4`.
 
+## Input lan Ngaso
+
+`takon` maca sakbaris teks saka pengguna lan mesthi ngasilake string.
+Bisa nganggo prompt sing ditampilake sakdurunge nunggu ketikan.
+
+```jna
+jeneng = takon "Siapa jenengmu?"
+ngomong "Sugeng rawuh, " + jeneng + "!"
+```
+
+`ngaso` ngaso program sawetara detik. Durasi kudu angka sing ora
+negatif, bisa bulat utawa koma.
+
+```jna
+ngomong "Nunggu sethik..."
+ngaso 2
+ngomong "Rampung"
+```
 ## Fungsi
 
 ```jna
@@ -155,8 +176,9 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 2 (sistem fungsi) lan kontrol alur `mandheg`/`terusna` wis
-   berjalan; standard library, `takon`, lan `ngaso` isih ing antrean.
+2. Fase 2 (sistem fungsi), kontrol alur, lan `takon`/`ngaso` wis
+   berjalan; standard library (konversi tipe, string, matematika)
+   isih ing antrean.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
    awit saka analisis kode saiki (pyproject lan skema paket uga isih
    kosong).
