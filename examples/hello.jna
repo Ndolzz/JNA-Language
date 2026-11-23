@@ -1,0 +1,16 @@
+# Program pertama JNA
+
+jeneng = "Nendi"
+umur = 16
+
+ngomong "Sugeng rawuh nang JNA!"
+ngomong "Jeneng: " + jeneng
+ngomong "Umur:"
+ngomong umur
+
+nek umur >= 17:
+    ngomong "Wis dewasa"
+liyane:
+    ngomong "Durung dewasa"
+
+wis
