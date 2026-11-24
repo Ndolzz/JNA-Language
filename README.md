@@ -45,8 +45,8 @@ Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
 | ngaso | Ngaso sawetara wektu (detik) |
 | wis | Nggakhiri program |
 
-Elinga yen `takon` mesthi ngasilake teks (string); konversi tipe
-bakal dadi bagean standard library nang fase sabanjure.
+Elinga yen `takon` mesthi ngasilake teks (string); gunakake
+`dadi_angka` utawa `dadi_koma` kanggo ngonversi asile dadi angka.
 
 ## Tipe data
 
