@@ -4,6 +4,9 @@
 
 ### Ditambahake
 
+- Fungsi utilitas: `acak` (acak bulat jegung kasebut), `acak_koma`
+  (0.0 nganti 1.0), `wektu` (detik sejak 1970); `bundele` saiki suport
+  jumlah desimal opsional.
 - Kontrol alur: `mandheg` (break) lan `terusna` (continue) nang njero
   `baleni`, kalebu nested loop lan validasi penggunaan sing salah.
 - Error sing jelas yen `mandheg`/`terusna` nang njaba `baleni` utawa

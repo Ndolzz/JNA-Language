@@ -1,4 +1,6 @@
 import math
+import random
+import time
 
 from ..runtime import RuntimeErrorJNA, stringify
 
@@ -172,7 +174,42 @@ def pangkat(arguments, line):
 def bundele(arguments, line):
     value = require_number("bundele", arguments[0], line)
 
-    if value >= 0:
-        return math.floor(value + 0.5)
+    if len(arguments) == 1:
+        return round_half_away(value, 1)
 
-    return math.ceil(value - 0.5)
+    cacah = require_integer("bundele", arguments[1], line)
+
+    if cacah < 0:
+        fail("'bundele' butuh cacah desimal ora negatif", line)
+
+    if cacah == 0:
+        return round_half_away(value, 1)
+
+    return round_half_away(value, 10 ** cacah) / (10 ** cacah)
+
+
+def round_half_away(value, skala):
+    if value >= 0:
+        return math.floor(value * skala + 0.5)
+
+    return math.ceil(value * skala - 0.5)
+
+
+# UTILITAS
+
+def acak(arguments, line):
+    wiwiti = require_integer("acak", arguments[0], line)
+    pungkasan = require_integer("acak", arguments[1], line)
+
+    if wiwiti > pungkasan:
+        fail("'acak' butuh wiwiti ora luwih gedhe tinimbang pungkasan", line)
+
+    return random.randint(wiwiti, pungkasan)
+
+
+def acak_koma(arguments, line):
+    return random.random()
+
+
+def wektu(arguments, line):
+    return time.time()

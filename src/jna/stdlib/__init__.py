@@ -3,6 +3,7 @@ from .functions import (
     dadi_teks, dadi_angka, dadi_bulat, dadi_koma,
     dawa, potong, ganti, goleki, resiki,
     mutlak, pangkat, bundele,
+    acak, acak_koma, wektu,
 )
 
 
@@ -18,7 +19,10 @@ BUILTINS = (
     NativeFunction("resiki", 1, 1, resiki),
     NativeFunction("mutlak", 1, 1, mutlak),
     NativeFunction("pangkat", 2, 2, pangkat),
-    NativeFunction("bundele", 1, 1, bundele),
+    NativeFunction("bundele", 1, 2, bundele),
+    NativeFunction("acak", 2, 2, acak),
+    NativeFunction("acak_koma", 0, 0, acak_koma),
+    NativeFunction("wektu", 0, 0, wektu),
 )
 
 

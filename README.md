@@ -174,7 +174,10 @@ nganggo statement utawa nang njero ekspresi.
 | resiki(teks) | Mbuse spasi ing pinggir teks |
 | mutlak(nilai) | Nilai absolut |
 | pangkat(dasar, pangkat) | Dasar dipangkatke |
-| bundele(nilai) | Pondhokan menyang angka paling cedhak |
+| bundele(nilai, cacah?) | Pondhokan ke angka paling cedhak; cacah desimal opsional |
+| acak(wiwiti, pungkasan) | Angka acak bulat jegung kasebut |
+| acak_koma() | Angka acak koma 0.0 nganti 1.0 |
+| wektu() | Wektu saiki ing detik sejak 1970 |
 
 ```jna
 ngomong dawa("Sugeng")
