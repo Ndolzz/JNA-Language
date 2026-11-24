@@ -5,6 +5,7 @@ from .functions import (
     mutlak, pangkat, bundele,
     acak, acak_koma, wektu,
     tambahake, kethoke, sisipke, urute,
+    ana, dibusake,
 )
 
 
@@ -28,6 +29,8 @@ BUILTINS = (
     NativeFunction("kethoke", 2, 2, kethoke),
     NativeFunction("sisipke", 3, 3, sisipke),
     NativeFunction("urute", 1, 1, urute),
+    NativeFunction("ana", 2, 2, ana),
+    NativeFunction("dibusake", 2, 2, dibusake),
 )
 
 

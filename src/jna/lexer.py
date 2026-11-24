@@ -55,6 +55,8 @@ class Lexer:
         ")": "RPAREN",
         "[": "LBRACKET",
         "]": "RBRACKET",
+        "{": "LBRACE",
+        "}": "RBRACE",
         ",": "COMMA",
         ":": "COLON",
     }

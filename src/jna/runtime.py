@@ -32,4 +32,6 @@ def stringify(value):
         return "kosong"
     if isinstance(value, list):
         return "[" + ", ".join(stringify(item) for item in value) + "]"
+    if isinstance(value, dict):
+        return "{" + ", ".join(key + ": " + stringify(item) for key, item in value.items()) + "}"
     return str(value)

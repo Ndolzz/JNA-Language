@@ -130,6 +130,11 @@ class Index:
 
 
 @dataclass
+class DictLiteral:
+    pairs: list
+
+
+@dataclass
 class IndexAssign:
     name: str
     index: object
@@ -473,6 +478,22 @@ class Parser:
                     prompt = String(self.advance().value)
 
                 return Takon(prompt, token.line)
+
+        if self.match("LBRACE"):
+            pairs = []
+
+            if self.current().type != "RBRACE":
+                while True:
+                    key = self.expression()
+                    self.expect("COLON")
+                    value = self.expression()
+                    pairs.append([key, value])
+
+                    if not self.match("COMMA"):
+                        break
+
+            self.expect("RBRACE")
+            return DictLiteral(pairs)
 
         if self.match("LBRACKET"):
             items = []

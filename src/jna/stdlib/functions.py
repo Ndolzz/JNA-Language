@@ -115,10 +115,10 @@ def dadi_koma(arguments, line):
 def dawa(arguments, line):
     value = arguments[0]
 
-    if isinstance(value, (str, list)):
+    if isinstance(value, (str, list, dict)):
         return len(value)
 
-    fail("'dawa' munggo ngukur teks lan dhaptar", line)
+    fail("'dawa' munggo ngukur teks, dhaptar, lan dictionary", line)
 
 
 def potong(arguments, line):
@@ -248,6 +248,36 @@ def sisipke(arguments, line):
         fail(f"Indeks {indeks} ora sah kanggo dhaptar sing dawa {len(dhaptar)}", line)
 
     dhaptar.insert(indeks, value)
+
+
+def require_dict(name, value, line):
+    if not isinstance(value, dict):
+        fail(f"'{name}' butuh dictionary", line)
+
+    return value
+
+
+def ana(arguments, line):
+    wadah = arguments[0]
+
+    if isinstance(wadah, dict):
+        kunci = require_text("ana", arguments[1], line)
+        return kunci in wadah
+
+    if isinstance(wadah, list):
+        return arguments[1] in wadah
+
+    fail("'ana' butuh dhaptar utawa dictionary", line)
+
+
+def dibusake(arguments, line):
+    wadah = require_dict("dibusake", arguments[0], line)
+    kunci = require_text("dibusake", arguments[1], line)
+
+    if kunci not in wadah:
+        fail(f"Kunci '{kunci}' durung ana", line)
+
+    return wadah.pop(kunci)
 
 
 def urute(arguments, line):

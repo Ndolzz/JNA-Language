@@ -6,7 +6,7 @@ from .parser import (
     Print, If, Repeat, End,
     FunctionDef, Return, Call, ExpressionStatement,
     Break, Continue, Takon, Ngaso,
-    ListLiteral, Index, IndexAssign
+    ListLiteral, Index, IndexAssign, DictLiteral
 )
 from .runtime import Environment, RuntimeErrorJNA, stringify
 from .functions import JNAFunction, NativeFunction
@@ -153,22 +153,31 @@ class Interpreter:
             index = self.evaluate(node.index)
             value = self.evaluate(node.value)
 
-            if isinstance(index, bool) or not isinstance(index, int):
-                raise RuntimeErrorJNA(
-                    "Indeks kudu angka bulat"
-                )
+            if isinstance(container, dict):
+                if not isinstance(index, str):
+                    raise RuntimeErrorJNA(
+                        "Kunci dictionary kudu teks"
+                    )
 
-            if not isinstance(container, list):
-                raise RuntimeErrorJNA(
-                    f"'{node.name}' bukan dhaptar, ora bisa disambungi indeks"
-                )
+                container[index] = value
 
-            if index < 0 or index >= len(container):
-                raise RuntimeErrorJNA(
-                    f"Indeks {index} ngluwihi dawa dhaptar sing {len(container)}"
-                )
+            elif isinstance(container, list):
+                if isinstance(index, bool) or not isinstance(index, int):
+                    raise RuntimeErrorJNA(
+                        "Indeks kudu angka bulat"
+                    )
 
-            container[index] = value
+                if index < 0 or index >= len(container):
+                    raise RuntimeErrorJNA(
+                        f"Indeks {index} ngluwihi dawa dhaptar sing {len(container)}"
+                    )
+
+                container[index] = value
+
+            else:
+                raise RuntimeErrorJNA(
+                    f"'{node.name}' bukan dhaptar utawa dictionary"
+                )
 
         elif isinstance(node, End):
             raise StopProgram()
@@ -255,9 +264,42 @@ class Interpreter:
                 for item in node.items
             ]
 
+        if isinstance(node, DictLiteral):
+            result = {}
+
+            for pair in node.pairs:
+                key = self.evaluate(pair[0])
+
+                if not isinstance(key, str):
+                    raise RuntimeErrorJNA(
+                        "Kunci dictionary kudu teks"
+                    )
+
+                if key in result:
+                    raise RuntimeErrorJNA(
+                        f"Kunci '{key}' kaping loro nang dictionary"
+                    )
+
+                result[key] = self.evaluate(pair[1])
+
+            return result
+
         if isinstance(node, Index):
             container = self.evaluate(node.target)
             index = self.evaluate(node.index)
+
+            if isinstance(container, dict):
+                if not isinstance(index, str):
+                    raise RuntimeErrorJNA(
+                        "Kunci dictionary kudu teks"
+                    )
+
+                if index not in container:
+                    raise RuntimeErrorJNA(
+                        f"Kunci '{index}' durung ana"
+                    )
+
+                return container[index]
 
             if isinstance(index, bool) or not isinstance(index, int):
                 raise RuntimeErrorJNA(
@@ -273,7 +315,7 @@ class Interpreter:
                 return container[index]
 
             raise RuntimeErrorJNA(
-                "Indeks munggo kanggo dhaptar lan teks"
+                "Indeks munggo kanggo dhaptar, dictionary, lan teks"
             )
 
         if isinstance(node, Call):
@@ -380,7 +422,7 @@ class Interpreter:
             return False
         if isinstance(value, bool):
             return value
-        if isinstance(value, list):
+        if isinstance(value, (list, dict)):
             return len(value) > 0
         return True
 

@@ -8,6 +8,10 @@
   acuan, list kosong palsu; fungsi `tambahake`, `kethoke`, `sisipke`,
   `urute`; `dawa` saiki ngukur dhaptar uga.
 - Contoh examples/lists.jna lan pengujian tests/test_lists.py.
+- Dictionary: literal `{...}` mung kunci teks, akses/penugasan indeks,
+  kunci dobel ditolak, dictionary kosong palsu; fungsi `ana` lan
+  `dibusake`; `dawa` ngukur dictionary uga.
+- Contoh examples/dicts.jna lan pengujian tests/test_dicts.py.
 - Fungsi utilitas: `acak` (acak bulat jegung kasebut), `acak_koma`
   (0.0 nganti 1.0), `wektu` (detik sejak 1970); `bundele` saiki suport
   jumlah desimal opsional.

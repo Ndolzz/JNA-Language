@@ -1,0 +1,22 @@
+# Dictionary nang JNA
+
+orang = {"jeneng": "Nendi", "umur": 16}
+
+ngomong orang
+ngomong orang["jeneng"]
+
+orang["umur"] = 17
+orang["kota"] = "Purwokerto"
+
+ngomong orang["umur"]
+ngomong orang["kota"]
+ngomong dawa(orang)
+
+ngomong ana(orang, "umur")
+ngomong ana(orang, "dhuwur")
+
+dibuange = dibusake(orang, "kota")
+ngomong dibuange
+ngomong dawa(orang)
+
+wis
