@@ -162,7 +162,7 @@ Aturan fungsi:
 
 Dhaptar ditulis nganggo kurung siku, dipisah karo koma. Indeks mulai
 saka 0 lan kudu angka bulat sing ora negatif. Dhaptar yaiku nilai
-acuan: mutasi keliahat saka kabeh variabel sing nudge dhaptar padha.
+acuan: mutasi ketone saka kabeh variabel sing nuding dhaptar padha.
 
 ```jna
 woh = ["mangga", "pelem"]
