@@ -178,9 +178,9 @@ Dhaptar kosong dianggep palsu nang kondisi. Fungsi dhaptar: `tambahake`,
 
 ## Dictionary
 
-Dictionary disimpen nang kurung kurawal karo pasangan kunci-teks:
-nilai. Kunci kudu teks lan ora kena rong galih nang dictionary sing
-padha, kapan pununggilan dhewe kagi.
+Dictionary disimpen nang kurung kurawal karo pasangan `kunci: nilai`.
+Kunci kudu teks lan ora kena ana sing rong kali nang dictionary sing
+padha.
 
 ```jna
 orang = {"jeneng": "Nendi", "umur": 16}
