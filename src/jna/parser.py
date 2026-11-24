@@ -130,6 +130,11 @@ class Index:
 
 
 @dataclass
+class Interpolation:
+    parts: list
+
+
+@dataclass
 class DictLiteral:
     pairs: list
 
@@ -430,6 +435,82 @@ class Parser:
 
         return self.postfix()
 
+    def build_string(self, token):
+        if "{" not in token.value and "}" not in token.value:
+            return String(token.value)
+
+        return self.build_interpolation(token.value, token.line)
+
+    def build_interpolation(self, text, line):
+        parts = []
+        literal = []
+        i = 0
+
+        while i < len(text):
+            char = text[i]
+
+            if char == "{":
+                if i + 1 < len(text) and text[i + 1] == "{":
+                    literal.append("{")
+                    i += 2
+                    continue
+
+                if literal:
+                    parts.append("".join(literal))
+                    literal = []
+
+                end = text.find("}", i + 1)
+
+                if end == -1:
+                    raise ParserError(
+                        f"Kurung pembuka '{{' durung ditutup "
+                        f"nang string pada baris {line}"
+                    )
+
+                name = text[i + 1:end].strip()
+
+                if not self.is_identifier(name):
+                    raise ParserError(
+                        f"'{name}' dudu jeneng variabel sing sah "
+                        f"nang string pada baris {line}"
+                    )
+
+                parts.append(Variable(name))
+                i = end + 1
+
+            elif char == "}":
+                if i + 1 < len(text) and text[i + 1] == "}":
+                    literal.append("}")
+                    i += 2
+                    continue
+
+                raise ParserError(
+                    f"Kurung penutup '}}' sing ora pas "
+                    f"nang string pada baris {line}"
+                )
+
+            else:
+                literal.append(char)
+                i += 1
+
+        if literal:
+            parts.append("".join(literal))
+
+        if len(parts) == 1 and isinstance(parts[0], str):
+            return String(parts[0])
+
+        return Interpolation(parts)
+
+    @staticmethod
+    def is_identifier(name):
+        if not name:
+            return False
+
+        if not (name[0].isalpha() or name[0] == "_"):
+            return False
+
+        return all(ch.isalnum() or ch == "_" for ch in name)
+
     def postfix(self):
         value = self.primary()
 
@@ -448,7 +529,7 @@ class Parser:
             return Number(token.value)
 
         if self.match("STRING"):
-            return String(token.value)
+            return self.build_string(token)
 
         if self.match("IDENTIFIER"):
             if self.current().type == "LPAREN":
@@ -475,7 +556,7 @@ class Parser:
                 prompt = None
 
                 if self.current().type == "STRING":
-                    prompt = String(self.advance().value)
+                    prompt = self.build_string(self.advance())
 
                 return Takon(prompt, token.line)
 

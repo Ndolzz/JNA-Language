@@ -12,6 +12,10 @@
   kunci dobel ditolak, dictionary kosong palsu; fungsi `ana` lan
   `dibusake`; `dawa` ngukur dictionary uga.
 - Contoh examples/dicts.jna lan pengujian tests/test_dicts.py.
+- String interpolation: `{jeneng}` nang string disilikake karo nilai
+  variabel; `{{`/`}}` dadi kurung literal; kesalahan format metu error
+  parser sing jelas.
+- Contoh examples/interpolation.jna lan pengujian tests/test_interpolation.py.
 - Fungsi utilitas: `acak` (acak bulat jegung kasebut), `acak_koma`
   (0.0 nganti 1.0), `wektu` (detik sejak 1970); `bundele` saiki suport
   jumlah desimal opsional.

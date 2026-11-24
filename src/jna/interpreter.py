@@ -6,7 +6,7 @@ from .parser import (
     Print, If, Repeat, End,
     FunctionDef, Return, Call, ExpressionStatement,
     Break, Continue, Takon, Ngaso,
-    ListLiteral, Index, IndexAssign, DictLiteral
+    ListLiteral, Index, IndexAssign, DictLiteral, Interpolation
 )
 from .runtime import Environment, RuntimeErrorJNA, stringify
 from .functions import JNAFunction, NativeFunction
@@ -316,6 +316,14 @@ class Interpreter:
 
             raise RuntimeErrorJNA(
                 "Indeks munggo kanggo dhaptar, dictionary, lan teks"
+            )
+
+        if isinstance(node, Interpolation):
+            return "".join(
+                part
+                if isinstance(part, str)
+                else self.stringify(self.evaluate(part))
+                for part in node.parts
             )
 
         if isinstance(node, Call):

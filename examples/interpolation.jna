@@ -1,0 +1,15 @@
+# Interpolasi string nang JNA
+
+jeneng = "Nendi"
+umur = 16
+
+ngomong "Sugeng rawuh, {jeneng}!"
+ngomong "Umure {umur} taun"
+ngomong "Nilai: {{utuh}}"
+
+gawe sapa(jeneng):
+    balekna "Sugeng, {jeneng}!"
+
+ngomong sapa("Banyumila")
+
+wis

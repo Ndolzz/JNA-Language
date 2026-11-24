@@ -23,6 +23,7 @@ python -m src.jna examples/input.jna
 python -m src.jna examples/stdlib.jna
 python -m src.jna examples/lists.jna
 python -m src.jna examples/dicts.jna
+python -m src.jna examples/interpolation.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -195,6 +196,27 @@ ana metu error. Dictionary kosong dianggep palsu nang kondisi.
 Gunakake `ana(wadah, kunci)` kanggo mriksa kamun ana, lan `dibusake`
 kanggo mbusak kunci (ngasilake nilai sing dibuwang).
 
+## Interpolasi String
+
+Nang njero string, `{jeneng}` disilikake karo nilai variabel. Sing
+disilih mung jeneng variabel; ora ana ekspresi nang njero kurung.
+Kurung literal ditulis dobel: `{{` lan `}}`.
+
+```jna
+jeneng = "Nendi"
+umur = 16
+
+ngomong "Sugeng rawuh, {jeneng}!"
+ngomong "Umure {umur} taun"
+ngomong "Nilai: {{utuh}}"
+```
+
+Asile: `Sugeng rawuh, Nendi!`, `Umure 16 taun`, `Nilai: {utuh}`.
+
+Variabel sing durung digawe utawa jeneng sing ora sah metu error
+sing jelas. Interpolasi uga bisa nang prompt `takon` lan nang njero
+fungsi, nganggo lingkup sing berlaku.
+
 ## Standard Library
 
 Fungsi-fungsi iki wis bisa diarani kaya fungsi biasa, dhisani
@@ -255,8 +277,8 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 4 wis rampung; Fase 5 terus: dhaptar lan dictionary wis ana;
-   string interpolation, module, berkas, exception, class, lan
+2. Fase 4 wis rampung; Fase 5 terus: dhaptar, dictionary, lan string
+   interpolation wis ana; module, berkas, exception, class, lan
    type system isih ing antrean.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
    awit saka analisis kode saiki (pyproject lan skema paket uga isih
