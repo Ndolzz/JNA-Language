@@ -99,9 +99,12 @@ class TestInterpolation(unittest.TestCase):
 
     def test_plain_strings_unchanged(self):
         self.assertEqual(
-            self.execute('ngomong "Halo"\nngomong "a} b{ c"\n'),
-            ["Halo", "a} b{ c"]
+            self.execute('ngomong "Halo"\nngomong "tanpa kurung"\n'),
+            ["Halo", "tanpa kurung"]
         )
+
+    def test_stray_brace_pair_still_rejected(self):
+        self.parse_error('ngomong "a} b{ c"\n')
 
 
 if __name__ == "__main__":
