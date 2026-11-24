@@ -119,6 +119,24 @@ class Ngaso:
 
 
 @dataclass
+class ListLiteral:
+    items: list
+
+
+@dataclass
+class Index:
+    target: object
+    index: object
+
+
+@dataclass
+class IndexAssign:
+    name: str
+    index: object
+    value: object
+
+
+@dataclass
 class End:
     pass
 
@@ -189,6 +207,9 @@ class Parser:
                 self.advance()
                 expression = self.finish_call(token)
                 return ExpressionStatement(expression)
+
+            if self.peek().type == "LBRACKET":
+                return self.index_assignment()
 
             return self.assignment()
 
@@ -324,6 +345,16 @@ class Parser:
 
         return Ngaso(duration, token.line)
 
+    def index_assignment(self):
+        name = self.expect("IDENTIFIER").value
+        self.expect("LBRACKET")
+        index = self.expression()
+        self.expect("RBRACKET")
+        self.expect("EQUAL")
+        value = self.expression()
+
+        return IndexAssign(name, index, value)
+
     def block(self):
         self.expect("INDENT")
 
@@ -392,7 +423,18 @@ class Parser:
             operator = self.advance()
             return Unary(operator.type, self.unary())
 
-        return self.primary()
+        return self.postfix()
+
+    def postfix(self):
+        value = self.primary()
+
+        while self.current().type == "LBRACKET":
+            self.advance()
+            index = self.expression()
+            self.expect("RBRACKET")
+            value = Index(value, index)
+
+        return value
 
     def primary(self):
         token = self.current()
@@ -431,6 +473,18 @@ class Parser:
                     prompt = String(self.advance().value)
 
                 return Takon(prompt, token.line)
+
+        if self.match("LBRACKET"):
+            items = []
+
+            if self.current().type != "RBRACKET":
+                items.append(self.expression())
+
+                while self.match("COMMA"):
+                    items.append(self.expression())
+
+            self.expect("RBRACKET")
+            return ListLiteral(items)
 
         if self.match("LPAREN"):
             value = self.expression()

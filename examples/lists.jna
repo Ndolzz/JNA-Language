@@ -1,0 +1,22 @@
+# Dhaptar nang JNA
+
+woh = ["mangga", "pelem", "jambu"]
+
+ngomong woh
+ngomong dawa(woh)
+ngomong woh[0]
+
+woh[1] = "gedhang"
+ngomong woh
+
+tambahake(woh, "pepaya")
+ngomong dawa(woh)
+
+urute(woh)
+ngomong woh
+
+kethoken = kethoke(woh, 0)
+ngomong kethoken
+ngomong woh
+
+wis

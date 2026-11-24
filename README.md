@@ -21,6 +21,7 @@ python -m src.jna examples/functions.jna
 python -m src.jna examples/loops.jna
 python -m src.jna examples/input.jna
 python -m src.jna examples/stdlib.jna
+python -m src.jna examples/lists.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -54,6 +55,7 @@ Elinga yen `takon` mesthi ngasilake teks (string); gunakake
 - Teks, contone `"Sugeng"`
 - Boolean: `bener` lan `salah`
 - Null: `kosong`
+- Dhaptar: contone `[1, 2, 3]`
 
 ## Operator
 
@@ -156,6 +158,22 @@ Aturan fungsi:
 5. Rekursi diwatesi nganti 100 tingkat panggilan supaya metu error sing
    jelas, ora nglakokake stack Python.
 
+## Dhaptar
+
+Dhaptar ditulis nganggo kurung siku, dipisah karo koma. Indeks mulai
+saka 0 lan kudu angka bulat sing ora negatif. Dhaptar yaiku nilai
+acuan: mutasi keliahat saka kabeh variabel sing nudge dhaptar padha.
+
+```jna
+woh = ["mangga", "pelem"]
+woh[1] = "gedhang"
+ngomong woh[0]
+ngomong dawa(woh)
+```
+
+Dhaptar kosong dianggep palsu nang kondisi. Fungsi dhaptar: `tambahake`,
+`kethoke` (ngasilake nilai sing dibuwang), `sisipke`, lan `urute`.
+
 ## Standard Library
 
 Fungsi-fungsi iki wis bisa diarani kaya fungsi biasa, dhisani
@@ -167,7 +185,7 @@ nganggo statement utawa nang njero ekspresi.
 | dadi_angka(nilai) | Ngonversi teks dadi angka |
 | dadi_bulat(nilai) | Ngonversi dadi angka bulat (mbusak bagean desimal) |
 | dadi_koma(nilai) | Ngonversi dadi angka koma |
-| dawa(teks) | Ngetang dawa teks |
+| dawa(nilai) | Ngetang dawa teks lan dhaptar |
 | potong(teks, wiwiti, pungkasan) | Njupuk bagean teks; pungkasan opsional |
 | ganti(teks, wingi, anyar) | Ngganti kabeh teks sing wingi dadi anyar |
 | goleki(teks, dicari) | Posisi kapisan; -1 yen ora ketemu |
@@ -178,6 +196,10 @@ nganggo statement utawa nang njero ekspresi.
 | acak(wiwiti, pungkasan) | Angka acak bulat jegung kasebut |
 | acak_koma() | Angka acak koma 0.0 nganti 1.0 |
 | wektu() | Wektu saiki ing detik sejak 1970 |
+| tambahake(dhaptar, nilai) | Nambahake nilai nang mburi |
+| kethoke(dhaptar, indeks) | Mbuhang item; ngasilake nilai sing dibuwang |
+| sisipke(dhaptar, indeks, nilai) | Selipke nilai nang posisi kasebut |
+| urute(dhaptar) | Ngurutake isi sing sejenis |
 
 ```jna
 ngomong dawa("Sugeng")
@@ -210,9 +232,9 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 4 wis lumayan: `takon`, `ngaso`, lan standard library pertama
-   (konversi, teks, matematika) wis ana; fungsi list lan utilitas liyane
-   isih ing antrean bareng fase list/dictionary.
+2. Fase 4 (input, standard library konversi/teks/matematika/utilitas)
+   wis rampung; Fase 5 dienggo: dhaptar wis ana; dictionary, module,
+   berkas, exception, class, lan type system isih ing antrean.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
    awit saka analisis kode saiki (pyproject lan skema paket uga isih
    kosong).

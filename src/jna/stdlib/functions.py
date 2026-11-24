@@ -115,10 +115,10 @@ def dadi_koma(arguments, line):
 def dawa(arguments, line):
     value = arguments[0]
 
-    if not isinstance(value, str):
-        fail("'dawa' munggo ngukur teks", line)
+    if isinstance(value, (str, list)):
+        return len(value)
 
-    return len(value)
+    fail("'dawa' munggo ngukur teks lan dhaptar", line)
 
 
 def potong(arguments, line):
@@ -213,3 +213,58 @@ def acak_koma(arguments, line):
 
 def wektu(arguments, line):
     return time.time()
+
+
+# DHAPTAR
+
+def require_list(name, value, line):
+    if not isinstance(value, list):
+        fail(f"'{name}' butuh dhaptar", line)
+
+    return value
+
+
+def tambahake(arguments, line):
+    dhaptar = require_list("tambahake", arguments[0], line)
+    dhaptar.append(arguments[1])
+
+
+def kethoke(arguments, line):
+    dhaptar = require_list("kethoke", arguments[0], line)
+    indeks = require_integer("kethoke", arguments[1], line)
+
+    if indeks < 0 or indeks >= len(dhaptar):
+        fail(f"Indeks {indeks} ngluwihi dawa dhaptar sing {len(dhaptar)}", line)
+
+    return dhaptar.pop(indeks)
+
+
+def sisipke(arguments, line):
+    dhaptar = require_list("sisipke", arguments[0], line)
+    indeks = require_integer("sisipke", arguments[1], line)
+    value = arguments[2]
+
+    if indeks < 0 or indeks > len(dhaptar):
+        fail(f"Indeks {indeks} ora sah kanggo dhaptar sing dawa {len(dhaptar)}", line)
+
+    dhaptar.insert(indeks, value)
+
+
+def urute(arguments, line):
+    dhaptar = require_list("urute", arguments[0], line)
+
+    if not dhaptar:
+        return dhaptar
+
+    kabeh_angka = all(
+        not isinstance(item, bool) and isinstance(item, (int, float))
+        for item in dhaptar
+    )
+    kabeh_teks = all(isinstance(item, str) for item in dhaptar)
+
+    if not kabeh_angka and not kabeh_teks:
+        fail("'urute' butuh kabeh isine sejenis angka utawa teks", line)
+
+    dhaptar.sort()
+
+    return dhaptar

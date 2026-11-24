@@ -53,6 +53,8 @@ class Lexer:
         ">=": "GREATER_EQUAL",
         "(": "LPAREN",
         ")": "RPAREN",
+        "[": "LBRACKET",
+        "]": "RBRACKET",
         ",": "COMMA",
         ":": "COLON",
     }

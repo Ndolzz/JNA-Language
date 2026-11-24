@@ -5,7 +5,8 @@ from .parser import (
     Variable, Binary, Unary, Assignment,
     Print, If, Repeat, End,
     FunctionDef, Return, Call, ExpressionStatement,
-    Break, Continue, Takon, Ngaso
+    Break, Continue, Takon, Ngaso,
+    ListLiteral, Index, IndexAssign
 )
 from .runtime import Environment, RuntimeErrorJNA, stringify
 from .functions import JNAFunction, NativeFunction
@@ -147,6 +148,28 @@ class Interpreter:
 
             time.sleep(duration)
 
+        elif isinstance(node, IndexAssign):
+            container = self.environment.get(node.name)
+            index = self.evaluate(node.index)
+            value = self.evaluate(node.value)
+
+            if isinstance(index, bool) or not isinstance(index, int):
+                raise RuntimeErrorJNA(
+                    "Indeks kudu angka bulat"
+                )
+
+            if not isinstance(container, list):
+                raise RuntimeErrorJNA(
+                    f"'{node.name}' bukan dhaptar, ora bisa disambungi indeks"
+                )
+
+            if index < 0 or index >= len(container):
+                raise RuntimeErrorJNA(
+                    f"Indeks {index} ngluwihi dawa dhaptar sing {len(container)}"
+                )
+
+            container[index] = value
+
         elif isinstance(node, End):
             raise StopProgram()
 
@@ -225,6 +248,33 @@ class Interpreter:
                 raise RuntimeErrorJNA(
                     "Input dipeksa mandheg"
                 )
+
+        if isinstance(node, ListLiteral):
+            return [
+                self.evaluate(item)
+                for item in node.items
+            ]
+
+        if isinstance(node, Index):
+            container = self.evaluate(node.target)
+            index = self.evaluate(node.index)
+
+            if isinstance(index, bool) or not isinstance(index, int):
+                raise RuntimeErrorJNA(
+                    "Indeks kudu angka bulat"
+                )
+
+            if isinstance(container, (list, str)):
+                if index < 0 or index >= len(container):
+                    raise RuntimeErrorJNA(
+                        f"Indeks {index} ngluwihi dawa isi sing {len(container)}"
+                    )
+
+                return container[index]
+
+            raise RuntimeErrorJNA(
+                "Indeks munggo kanggo dhaptar lan teks"
+            )
 
         if isinstance(node, Call):
             called = self.environment.get(node.name)
@@ -330,6 +380,8 @@ class Interpreter:
             return False
         if isinstance(value, bool):
             return value
+        if isinstance(value, list):
+            return len(value) > 0
         return True
 
     @staticmethod

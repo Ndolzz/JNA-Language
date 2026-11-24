@@ -4,6 +4,10 @@
 
 ### Ditambahake
 
+- Dhaptar (list): literal `[...]`, indeks, penugasan indeks, nilai
+  acuan, list kosong palsu; fungsi `tambahake`, `kethoke`, `sisipke`,
+  `urute`; `dawa` saiki ngukur dhaptar uga.
+- Contoh examples/lists.jna lan pengujian tests/test_lists.py.
 - Fungsi utilitas: `acak` (acak bulat jegung kasebut), `acak_koma`
   (0.0 nganti 1.0), `wektu` (detik sejak 1970); `bundele` saiki suport
   jumlah desimal opsional.

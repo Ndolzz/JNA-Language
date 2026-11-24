@@ -30,4 +30,6 @@ def stringify(value):
         return "salah"
     if value is None:
         return "kosong"
+    if isinstance(value, list):
+        return "[" + ", ".join(stringify(item) for item in value) + "]"
     return str(value)
