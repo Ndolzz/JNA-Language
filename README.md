@@ -259,7 +259,7 @@ ngomong dadi_angka("42") + 8
 ngomong pangkat(2, 10)
 ```
 
-Argumen sing seler/type-e salah mbutuhake nilai sing bener.
+Argumen sing salah jumlah utawa jinis metu error JNA sing jelas karo nomer baris.
 Kesalahan keluar metu error JNA sing jelas karo nomer baris.
 
 ## Pengujian
