@@ -6,6 +6,13 @@ nggunakake pustaka standar, dadi bisa mlaku nang Termux / ARMv7.
 
 Dokumen iki mung njlentrehake fitur sing wis ana lan wis diimplementasikan.
 
+Dokumentasi lengkap:
+
+- [docs/LANGUAGE_SPEC.md](docs/LANGUAGE_SPEC.md) - spesifikasi bahasa
+- [docs/SYNTAX.md](docs/SYNTAX.md) - panduan sintaks
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - arsitektur implementasi
+- [docs/ROADMAP.md](docs/ROADMAP.md) - status fase pengembangan
+
 ## Instalasi
 
 ```bash
