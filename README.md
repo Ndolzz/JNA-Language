@@ -226,8 +226,8 @@ fungsi, nganggo lingkup sing berlaku.
 
 ## Standard Library
 
-Fungsi-fungsi iki wis bisa diarani kaya fungsi biasa, dhisani
-nganggo statement utawa nang njero ekspresi.
+Fungsi-fungsi iki dipanggil kaya fungsi biasa,
+isa dadi statement utawa nang njero ekspresi.
 
 | Fungsi | Gunane |
 | --- | --- |
@@ -259,8 +259,8 @@ ngomong dadi_angka("42") + 8
 ngomong pangkat(2, 10)
 ```
 
-Argumen sing seler/type-e salah bakal metu error JNA sing jelas,
-dhisani karo nomer baris.
+Argumen sing seler/type-e salah mbutuhake nilai sing bener.
+Kesalahan keluar metu error JNA sing jelas karo nomer baris.
 
 ## Pengujian
 
@@ -277,7 +277,8 @@ src/jna/
   parser.py       # Parser lan node AST
   interpreter.py  # Evaluasi program
   runtime.py      # Environment lan error runtime
-  functions.py    # Representasi fungsi JNA
+  functions.py    # JNAFunction lan NativeFunction
+  stdlib/         # 21 fungsi built-in lan registry
 ```
 
 ## Roadmap
@@ -287,6 +288,5 @@ src/jna/
 2. Fase 4 wis rampung; Fase 5 terus: dhaptar, dictionary, lan string
    interpolation wis ana; module, berkas, exception, class, lan
    type system isih ing antrean.
-3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil,
-   awit saka analisis kode saiki (pyproject lan skema paket uga isih
-   kosong).
+3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil.
+   Packaging (pyproject.toml), LICENSE, lan docs/ wis ana.
