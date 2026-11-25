@@ -54,7 +54,7 @@ Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
 | terusna | Nerusake nang iterasi sabanjure |
 | takon | Nampa input saka pengguna |
 | ngaso | Ngaso sawetara wektu (detik) |
-| ngunduh | Mbetoo modul liyane |
+| ngunduh | Ngunduh modul liyane |
 | wis | Nggakhiri program |
 
 Elinga yen `takon` mesthi ngasilake teks (string); gunakake
@@ -228,7 +228,7 @@ fungsi, nganggo lingkup sing berlaku.
 
 ## Module
 
-`ngunduh` mbetoo modul `.jna` liyane. Jeneng berkas relatif nang folder
+`ngunduh` ngunduh modul `.jna` liyane. Jeneng berkas relatif nang folder
 berkas program sing lagi mlaku; akhiran `.jna` ditambahake otomatis
 yen kurang. Fungsi lan variabel tingkat ndhuwur modul didefinisikake
 nang lingkup panggil.
