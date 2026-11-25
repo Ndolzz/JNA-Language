@@ -16,6 +16,11 @@
   variabel; `{{`/`}}` dadi kurung literal; kesalahan format metu error
   parser sing jelas.
 - Contoh examples/interpolation.jna lan pengujian tests/test_interpolation.py.
+- Module: statement `ngunduh` mbetoo berkas `.jna` (relatif maring
+  folder berkas program), eksekusi sepisan, klosur modul, proteksi
+  impor melingkar, lan kesalahan berkas nang error runtime.
+- Contoh examples/ngunduh.jna lan examples/sapaan.jna beserta
+  pengujian tests/test_modules.py.
 - Fungsi utilitas: `acak` (acak bulat jegung kasebut), `acak_koma`
   (0.0 nganti 1.0), `wektu` (detik sejak 1970); `bundele` saiki suport
   jumlah desimal opsional.

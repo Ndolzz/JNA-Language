@@ -1,0 +1,6 @@
+# Modul sapaan kanggo examples/ngunduh.jna
+
+gawe sapa(jeneng):
+    balekna "Sugeng rawuh, " + jeneng + "!"
+
+wis

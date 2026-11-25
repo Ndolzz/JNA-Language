@@ -1,0 +1,6 @@
+# Ngunduh modul
+
+ngunduh "sapaan"
+ngomong sapa("Nendi")
+
+wis

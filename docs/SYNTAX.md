@@ -77,3 +77,10 @@ ngomong "Mulai"
 wis
 ngomong "Durung kacapake"
 ```
+
+## Module
+
+```jna
+ngunduh "sapaan"
+ngomong sapa("Nendi")
+```

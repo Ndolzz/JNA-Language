@@ -31,6 +31,7 @@ python -m src.jna examples/stdlib.jna
 python -m src.jna examples/lists.jna
 python -m src.jna examples/dicts.jna
 python -m src.jna examples/interpolation.jna
+python -m src.jna examples/ngunduh.jna
 ```
 
 Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
@@ -53,6 +54,7 @@ Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
 | terusna | Nerusake nang iterasi sabanjure |
 | takon | Nampa input saka pengguna |
 | ngaso | Ngaso sawetara wektu (detik) |
+| ngunduh | Mbetoo modul liyane |
 | wis | Nggakhiri program |
 
 Elinga yen `takon` mesthi ngasilake teks (string); gunakake
@@ -224,6 +226,21 @@ Variabel sing durung digawe utawa jeneng sing ora sah metu error
 sing jelas. Interpolasi uga bisa nang prompt `takon` lan nang njero
 fungsi, nganggo lingkup sing berlaku.
 
+## Module
+
+`ngunduh` mbetoo modul `.jna` liyane. Jeneng berkas relatif nang folder
+berkas program sing lagi mlaku; akhiran `.jna` ditambahake otomatis
+yen kurang. Fungsi lan variabel tingkat ndhuwur modul didefinisikake
+nang lingkup panggil.
+
+```jna
+ngunduh "sapaan"
+ngomong sapa("Nendi")
+```
+
+Modul mung dieksekusi sepisan; panggilan berulang ora njalankake ulang.
+Impor melingkar metu error, lan `ngunduh` bisa ditulis nang njero fungsi.
+
 ## Standard Library
 
 Fungsi-fungsi iki dipanggil kaya fungsi biasa,
@@ -285,8 +302,8 @@ src/jna/
 
 1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
    nduweni nomer baris.
-2. Fase 4 wis rampung; Fase 5 terus: dhaptar, dictionary, lan string
-   interpolation wis ana; module, berkas, exception, class, lan
-   type system isih ing antrean.
+2. Fase 4 wis rampung; Fase 5 terus: dhaptar, dictionary, string
+   interpolation, lan module (`ngunduh`) wis ana; berkas, exception,
+   class, lan type system isih ing antrean.
 3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil.
    Packaging (pyproject.toml), LICENSE, lan docs/ wis ana.

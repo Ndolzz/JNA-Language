@@ -37,6 +37,7 @@ sebagai pesan yang jelas.
 | mandheg | Break |
 | terusna | Continue |
 | ngaso | Tidur sejenak (detik) |
+| ngunduh | Memuat modul |
 | wis | Mengakhiri program |
 
 ### 3.2 Pengenal
@@ -174,6 +175,29 @@ gawe tambah(a, b):
 
 `wis` menghentikan program di posisi mana pun, termasuk di dalam blok.
 
+### 6.8 Ngunduh
+
+```jna
+ngunduh "sapaan"
+```
+
+Memuat `sapaan.jna` relatif terhadap folder berkas program yang sedang
+berjalan; akhiran `.jna` ditambahkan bila tidak ditulis. Argumen wajib
+teks.
+
+Semantik:
+
+- Modul dieksekusi sekali per interpreter; panggilan berulang tidak
+  menjalankan ulang.
+- Impor melingkar dikenali dan keluar error runtime.
+- Berkas tidak ditemukan atau bukan UTF-8 keluar error runtime.
+- Fungsi dan variabel tingkat atas modul didefinisikan di lingkup
+  tempat `ngunduh` dieksekusi; klosur memastikan fungsi modul tetap
+  mengakses variabel modulnya.
+- `wis` di dalam modul hanya mengakhiri modul.
+- Efek samping `ngomong` di modul tetap dieksekusi.
+- Kesalahan parse di modul menyebarkan `ParserError`; nomor barisnya
+  belum menyertakan konteks modul.
 ## 7. Lingkup
 
 - Lingkup global tunggal; setiap panggilan fungsi membuat lingkup baru

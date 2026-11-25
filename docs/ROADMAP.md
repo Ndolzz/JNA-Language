@@ -26,8 +26,10 @@ library.
 ## Fase 5 - Advanced Language Features
 
 Selesai: dhaptar, dictionary, string interpolation, built-in functions.
-Belum: module dan import, operasi berkas, penanganan exception, class,
-type system statis.
+Tambahan selesai: module dan import melalui statement `ngunduh`
+(klosur, eksekusi sekali, anti-impor-melingkar).
+Belum: operasi berkas, penanganan exception, class, dan type system
+statis.
 
 ## Fase 6 - Compiler Development
 
