@@ -79,6 +79,10 @@ class TestJNA(unittest.TestCase):
             ["Mulai"]
         )
 
+    def test_mixed_type_comparison_rejected(self):
+        with self.assertRaises(RuntimeErrorJNA):
+            self.execute('ngomong 1 < "x"\n')
+
 
 if __name__ == "__main__":
     unittest.main()

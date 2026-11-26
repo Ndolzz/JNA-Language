@@ -22,6 +22,8 @@ def require_text(name, value, line):
 def require_number(name, value, line):
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         fail(f"'{name}' butuh angka", line)
+    if isinstance(value, float) and not math.isfinite(value):
+        fail(f"'{name}' butuh angka sing winates", line)
 
     return value
 
@@ -74,7 +76,10 @@ def dadi_bulat(arguments, line):
         return value
 
     if isinstance(value, float):
-        return int(value)
+        try:
+            return int(value)
+        except (OverflowError, ValueError):
+            fail("'dadi_bulat' ora bisa ngubah nilai iki", line)
 
     if not isinstance(value, str):
         fail("'dadi_bulat' ora bisa ngubah nilai iki", line)
@@ -88,7 +93,7 @@ def dadi_bulat(arguments, line):
 
     try:
         return int(float(text))
-    except ValueError:
+    except (OverflowError, ValueError):
         fail(f"'{value}' ora bisa dadi angka bulat", line)
 
 
@@ -168,24 +173,38 @@ def pangkat(arguments, line):
     if dasar == 0 and pangkat < 0:
         fail("Ora bisa 0 dipangkatke angka negatif", line)
 
-    return dasar ** pangkat
+    try:
+        result = dasar ** pangkat
+    except (OverflowError, ValueError):
+        fail("'pangkat' ngasilake angka sing ora sah", line)
+
+    if isinstance(result, complex):
+        fail("'pangkat' ora nyedhiyakake hasil kompleks", line)
+
+    if isinstance(result, float) and not math.isfinite(result):
+        fail("'pangkat' ngasilake angka sing ora winates", line)
+
+    return result
 
 
 def bundele(arguments, line):
     value = require_number("bundele", arguments[0], line)
 
-    if len(arguments) == 1:
-        return round_half_away(value, 1)
+    try:
+        if len(arguments) == 1:
+            return round_half_away(value, 1)
 
-    cacah = require_integer("bundele", arguments[1], line)
+        cacah = require_integer("bundele", arguments[1], line)
 
-    if cacah < 0:
-        fail("'bundele' butuh cacah desimal ora negatif", line)
+        if cacah < 0:
+            fail("'bundele' butuh cacah desimal ora negatif", line)
 
-    if cacah == 0:
-        return round_half_away(value, 1)
+        if cacah == 0:
+            return round_half_away(value, 1)
 
-    return round_half_away(value, 10 ** cacah) / (10 ** cacah)
+        return round_half_away(value, 10 ** cacah) / (10 ** cacah)
+    except (OverflowError, ValueError):
+        fail("'bundele' ora bisa ngolah angka iki", line)
 
 
 def round_half_away(value, skala):

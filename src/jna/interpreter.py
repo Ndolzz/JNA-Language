@@ -406,15 +406,19 @@ class Interpreter:
             return left != right
 
         if op == "GREATER":
+            self.require_comparable(left, right)
             return left > right
 
         if op == "LESS":
+            self.require_comparable(left, right)
             return left < right
 
         if op == "GREATER_EQUAL":
+            self.require_comparable(left, right)
             return left >= right
 
         if op == "LESS_EQUAL":
+            self.require_comparable(left, right)
             return left <= right
 
         raise RuntimeErrorJNA(f"Operator ora dikenal: {op}")
@@ -423,6 +427,24 @@ class Interpreter:
     def require_number(value):
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise RuntimeErrorJNA("Operasi iki mbutuhake angka")
+
+    @staticmethod
+    def require_comparable(left, right):
+        both_numbers = (
+            not isinstance(left, bool)
+            and not isinstance(right, bool)
+            and isinstance(left, (int, float))
+            and isinstance(right, (int, float))
+        )
+        both_text = (
+            isinstance(left, str)
+            and isinstance(right, str)
+        )
+
+        if not both_numbers and not both_text:
+            raise RuntimeErrorJNA(
+                "Perbandingan iki mbutuhake angka utawa teks sing sejenis"
+            )
 
     @staticmethod
     def is_truthy(value):

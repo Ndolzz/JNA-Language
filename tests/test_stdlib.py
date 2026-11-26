@@ -58,6 +58,10 @@ class TestStdlib(unittest.TestCase):
             ["3", "-3", "8"]
         )
 
+    def test_dadi_bulat_rejects_infinity(self):
+        self.error('dadi_bulat("inf")\n')
+        self.error('dadi_bulat(1.0 / 0.0)\n')
+
     def test_dadi_koma(self):
         self.assertEqual(
             self.execute('ngomong dadi_koma("2.5")\n'),
@@ -120,6 +124,9 @@ class TestStdlib(unittest.TestCase):
 
     def test_pangkat_zero_negative(self):
         self.error('pangkat(0, -2)\n')
+
+    def test_pangkat_rejects_complex_result(self):
+        self.error('pangkat(-2, 0.5)\n')
 
     def test_bundele(self):
         self.assertEqual(
