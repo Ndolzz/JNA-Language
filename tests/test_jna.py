@@ -3,6 +3,7 @@ import unittest
 from src.jna.lexer import tokenize
 from src.jna.parser import parse
 from src.jna.interpreter import Interpreter
+from src.jna.runtime import RuntimeErrorJNA
 
 
 class TestJNA(unittest.TestCase):
