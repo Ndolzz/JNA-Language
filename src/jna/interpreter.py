@@ -6,9 +6,12 @@ from .parser import (
     Print, If, Repeat, End,
     FunctionDef, Return, Call, ExpressionStatement,
     Break, Continue, Takon, Ngaso,
-    ListLiteral, Index, IndexAssign, DictLiteral, Interpolation
+    ListLiteral, Index, IndexAssign, DictLiteral, Interpolation, Ngunduh
 )
+from .parser import parse
+from .lexer import tokenize
 from .runtime import Environment, RuntimeErrorJNA, stringify
+from pathlib import Path
 from .functions import JNAFunction, NativeFunction
 from .stdlib import install_builtins
 
@@ -34,12 +37,15 @@ class ReturnSignal(Exception):
 
 
 class Interpreter:
-    def __init__(self):
+    def __init__(self, base_dir=None):
         self.globals = Environment()
         install_builtins(self.globals)
         self.environment = self.globals
         self.function_depth = 0
         self.loop_depth = 0
+        self.module_base = Path(base_dir) if base_dir else Path(".")
+        self.modules_loading = set()
+        self.modules_loaded = set()
 
     def run(self, program):
         try:
@@ -179,6 +185,16 @@ class Interpreter:
                     f"'{node.name}' bukan dhaptar utawa dictionary"
                 )
 
+        elif isinstance(node, Ngunduh):
+            path_value = self.evaluate(node.path)
+
+            if not isinstance(path_value, str):
+                raise RuntimeErrorJNA(
+                    "Jeneng modul kudu teks"
+                )
+
+            self.load_module(path_value, node.line)
+
         elif isinstance(node, End):
             raise StopProgram()
 
@@ -225,6 +241,55 @@ class Interpreter:
             self.environment = previous_environment
 
         return result
+
+    def load_module(self, filename, line=None):
+        module_name = filename
+
+        if not module_name.endswith(".jna"):
+            module_name = module_name + ".jna"
+
+        path = (self.module_base / module_name).resolve()
+
+        if path in self.modules_loaded:
+            return
+
+        if path in self.modules_loading:
+            raise RuntimeErrorJNA(
+                f"Ngunduh melingkar: '{filename}'"
+            )
+
+        if not path.is_file():
+            raise RuntimeErrorJNA(
+                f"Modul ora ditemokake: '{filename}'"
+            )
+
+        try:
+            source = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            raise RuntimeErrorJNA(
+                f"Modul '{filename}' kudu UTF-8"
+            )
+
+        program = parse(tokenize(source))
+
+        previous_environment = self.environment
+        module_environment = Environment()
+        self.environment = module_environment
+        self.modules_loading.add(path)
+
+        try:
+            for statement in program.statements:
+                self.execute(statement)
+        except StopProgram:
+            pass
+        finally:
+            self.environment = previous_environment
+            self.modules_loading.discard(path)
+
+        self.modules_loaded.add(path)
+
+        for defined_name, value in module_environment.variables.items():
+            self.environment.define(defined_name, value)
 
     def evaluate(self, node):
         if isinstance(node, Number):
@@ -461,5 +526,5 @@ class Interpreter:
         return stringify(value)
 
 
-def interpret(program):
-    Interpreter().run(program)
+def interpret(program, base_dir=None):
+    Interpreter(base_dir).run(program)

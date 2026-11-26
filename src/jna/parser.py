@@ -147,6 +147,12 @@ class IndexAssign:
 
 
 @dataclass
+class Ngunduh:
+    path: object
+    line: int = 0
+
+
+@dataclass
 class End:
     pass
 
@@ -247,6 +253,11 @@ class Parser:
 
             if token.value == "ngaso":
                 return self.ngaso_statement()
+
+            if token.value == "ngunduh":
+                self.advance()
+                path = self.expression()
+                return Ngunduh(path, token.line)
 
             if token.value == "wis":
                 self.advance()

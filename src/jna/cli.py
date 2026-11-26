@@ -20,7 +20,7 @@ def run_file(filename):
 
         tokens = tokenize(source)
         program = parse(tokens)
-        interpret(program)
+        interpret(program, base_dir=str(path.parent))
 
         return 0
 

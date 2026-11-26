@@ -15,7 +15,7 @@ KEYWORDS = {
     "mandheg",
     "terusna",
     "ngaso",
-    "wis",
+    "ngunduh",
 }
 
 
