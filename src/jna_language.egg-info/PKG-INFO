@@ -1,0 +1,320 @@
+Metadata-Version: 2.4
+Name: jna-language
+Version: 0.1.0
+Summary: JNA - Jawa Ngapak Absurd programming language
+Author: naze
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# JNA Language
+
+JNA (Jawa Ngapak Absurd) yaiku basa pemrograman independen karo sintaks khas
+Jawa Ngapak. Implementasi saiki ditulis nang Python (sethike 3.8) lan mung
+nggunakake pustaka standar, dadi bisa mlaku nang Termux / ARMv7.
+
+Dokumen iki mung njlentrehake fitur sing wis ana lan wis diimplementasikan.
+
+Dokumentasi lengkap:
+
+- [docs/LANGUAGE_SPEC.md](docs/LANGUAGE_SPEC.md) - spesifikasi bahasa
+- [docs/SYNTAX.md](docs/SYNTAX.md) - panduan sintaks
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - arsitektur implementasi
+- [docs/ROADMAP.md](docs/ROADMAP.md) - status fase pengembangan
+
+## Instalasi
+
+```bash
+git clone https://github.com/Ndolzz/JNA-Language.git
+cd JNA-Language
+```
+
+## Cara nglakokake
+
+```bash
+python -m src.jna examples/hello.jna
+python -m src.jna examples/functions.jna
+python -m src.jna examples/loops.jna
+python -m src.jna examples/input.jna
+python -m src.jna examples/stdlib.jna
+python -m src.jna examples/lists.jna
+python -m src.jna examples/dicts.jna
+python -m src.jna examples/interpolation.jna
+python -m src.jna examples/ngunduh.jna
+```
+
+Ora ana dependensi eksternal; mung butuh Python 3 (nang Termux cukup
+`pkg install python`).
+
+## Kata kunci sing wis ana
+
+| Kata kunci | Gunane |
+| --- | --- |
+| ngomong | Nampilake output |
+| nek | Kondisi if |
+| liyane | Kondisi else |
+| baleni | Ulangan kaping tetep |
+| gawe | Ngertinake fungsi |
+| balekna | Ngembalikan nilai saka fungsi |
+| bener | Boolean bener |
+| salah | Boolean salah |
+| kosong | Nilai kosong (null) |
+| mandheg | Ngandegake baleni |
+| terusna | Nerusake nang iterasi sabanjure |
+| takon | Nampa input saka pengguna |
+| ngaso | Ngaso sawetara wektu (detik) |
+| ngunduh | Ngunduh modul liyane |
+| wis | Nggakhiri program |
+
+Elinga yen `takon` mesthi ngasilake teks (string); gunakake
+`dadi_angka` utawa `dadi_koma` kanggo ngonversi asile dadi angka.
+
+## Tipe data
+
+- Angka bulat lan koma, contone `10`, `3.5`
+- Teks, contone `"Sugeng"`
+- Boolean: `bener` lan `salah`
+- Null: `kosong`
+- Dhaptar: contone `[1, 2, 3]`
+- Dictionary: contone `{"jeneng": "Nendi"}` (kunci kudu teks)
+
+## Operator
+
+- Aritmetika: `+`, `-`, `*`, `/`, `%`
+- Komparasi: `==`, `!=`, `<`, `>`, `<=`, `>=`
+- Komentar baris nganggo `#`
+
+## Variabel
+
+```jna
+jeneng = "Nendi"
+umur = 16
+```
+
+## Kondisi
+
+```jna
+nek umur >= 17:
+    ngomong "Wis dewasa"
+liyane:
+    ngomong "Durung dewasa"
+```
+
+## Perulangan
+
+```jna
+baleni 5:
+    ngomong "JNA"
+```
+
+## Mandheg lan Terusna
+
+Nang njero `baleni`, `mandheg` ngandegake ulangan lan `terusna`
+mlumpat nang iterasi sabanjure. Kaduwe mung bisa ditulis nang njero
+`baleni` lan ora bisa nembus wates fungsi.
+
+```jna
+angka = 0
+baleni 5:
+    angka = angka + 1
+    nek angka == 3:
+        terusna
+    nek angka == 5:
+        mandheg
+    ngomong angka
+```
+
+Asile: `1`, `2`, `4`.
+
+## Input lan Ngaso
+
+`takon` maca sakbaris teks saka pengguna lan mesthi ngasilake string.
+Bisa nganggo prompt sing ditampilake sakdurunge nunggu ketikan.
+
+```jna
+jeneng = takon "Siapa jenengmu?"
+ngomong "Sugeng rawuh, " + jeneng + "!"
+```
+
+`ngaso` ngaso program sawetara detik. Durasi kudu angka sing ora
+negatif, bisa bulat utawa koma.
+
+```jna
+ngomong "Nunggu sethik..."
+ngaso 2
+ngomong "Rampung"
+```
+
+## Fungsi
+
+```jna
+gawe tambah(a, b):
+    balekna a + b
+
+asil = tambah(10, 5)
+ngomong asil
+
+gawe sapa(jeneng):
+    ngomong "Sugeng rawuh, " + jeneng + "!"
+
+sapa("Nendi")
+```
+
+Fungsi rekursif uga didukung:
+
+```jna
+gawe faktorial(n):
+    nek n <= 1:
+        balekna 1
+    liyane:
+        balekna n * faktorial(n - 1)
+```
+
+Aturan fungsi:
+
+1. Jumlah argumen kudu cocog karo penataan parameter.
+2. `balekna` mung bisa ana nang njero fungsi; tanpa nilai, asile `kosong`.
+3. Variabel segera nang fungsi kapisah saka lingkup global.
+4. Panggilan fungsi bisa dadi ekspresi utawa statement dhewe.
+5. Rekursi diwatesi nganti 100 tingkat panggilan supaya metu error sing
+   jelas, ora nglakokake stack Python.
+
+## Dhaptar
+
+Dhaptar ditulis nganggo kurung siku, dipisah karo koma. Indeks mulai
+saka 0 lan kudu angka bulat sing ora negatif. Dhaptar yaiku nilai
+acuan: mutasi ketone saka kabeh variabel sing nuding dhaptar padha.
+
+```jna
+woh = ["mangga", "pelem"]
+woh[1] = "gedhang"
+ngomong woh[0]
+ngomong dawa(woh)
+```
+
+Dhaptar kosong dianggep palsu nang kondisi. Fungsi dhaptar: `tambahake`,
+`kethoke` (ngasilake nilai sing dibuwang), `sisipke`, lan `urute`.
+
+## Dictionary
+
+Dictionary disimpen nang kurung kurawal karo pasangan `kunci: nilai`.
+Kunci kudu teks lan ora kena ana sing rong kali nang dictionary sing
+padha.
+
+```jna
+orang = {"jeneng": "Nendi", "umur": 16}
+ngomong orang["jeneng"]
+
+orang["umur"] = 17
+orang["kota"] = "Purwokerto"
+```
+
+Penugasan nang kunci anyar bakal nambahake; maca kunci sing durung
+ana metu error. Dictionary kosong dianggep palsu nang kondisi.
+Gunakake `ana(wadah, kunci)` kanggo mriksa kamun ana, lan `dibusake`
+kanggo mbusak kunci (ngasilake nilai sing dibuwang).
+
+## Interpolasi String
+
+Nang njero string, `{jeneng}` disilikake karo nilai variabel. Sing
+disilih mung jeneng variabel; ora ana ekspresi nang njero kurung.
+Kurung literal ditulis dobel: `{{` lan `}}`.
+
+```jna
+jeneng = "Nendi"
+umur = 16
+
+ngomong "Sugeng rawuh, {jeneng}!"
+ngomong "Umure {umur} taun"
+ngomong "Nilai: {{utuh}}"
+```
+
+Asile: `Sugeng rawuh, Nendi!`, `Umure 16 taun`, `Nilai: {utuh}`.
+
+Variabel sing durung digawe utawa jeneng sing ora sah metu error
+sing jelas. Interpolasi uga bisa nang prompt `takon` lan nang njero
+fungsi, nganggo lingkup sing berlaku.
+
+## Module
+
+`ngunduh` ngunduh modul `.jna` liyane. Jeneng berkas relatif nang folder
+berkas program sing lagi mlaku; akhiran `.jna` ditambahake otomatis
+yen kurang. Fungsi lan variabel tingkat ndhuwur modul didefinisikake
+nang lingkup panggil.
+
+```jna
+ngunduh "sapaan"
+ngomong sapa("Nendi")
+```
+
+Modul mung dieksekusi sepisan; panggilan berulang ora njalankake ulang.
+Impor melingkar metu error, lan `ngunduh` bisa ditulis nang njero fungsi.
+
+## Standard Library
+
+Fungsi-fungsi iki dipanggil kaya fungsi biasa,
+isa dadi statement utawa nang njero ekspresi.
+
+| Fungsi | Gunane |
+| --- | --- |
+| dadi_teks(nilai) | Ngonversi dadi teks |
+| dadi_angka(nilai) | Ngonversi teks dadi angka |
+| dadi_bulat(nilai) | Ngonversi dadi angka bulat (mbusak bagean desimal) |
+| dadi_koma(nilai) | Ngonversi dadi angka koma |
+| dawa(nilai) | Ngetang dawa teks, dhaptar, lan dictionary |
+| potong(teks, wiwiti, pungkasan) | Njupuk bagean teks; pungkasan opsional |
+| ganti(teks, wingi, anyar) | Ngganti kabeh teks sing wingi dadi anyar |
+| goleki(teks, dicari) | Posisi kapisan; -1 yen ora ketemu |
+| resiki(teks) | Mbuse spasi ing pinggir teks |
+| mutlak(nilai) | Nilai absolut |
+| pangkat(dasar, pangkat) | Dasar dipangkatke |
+| bundele(nilai, cacah?) | Pondhokan ke angka paling cedhak; cacah desimal opsional |
+| acak(wiwiti, pungkasan) | Angka acak bulat jegung kasebut |
+| acak_koma() | Angka acak koma 0.0 nganti 1.0 |
+| wektu() | Wektu saiki ing detik sejak 1970 |
+| tambahake(dhaptar, nilai) | Nambahake nilai nang mburi |
+| kethoke(dhaptar, indeks) | Mbuhang item; ngasilake nilai sing dibuwang |
+| sisipke(dhaptar, indeks, nilai) | Selipke nilai nang posisi kasebut |
+| urute(dhaptar) | Ngurutake isi sing sejenis |
+| ana(wadah, kunci) | Mriksa kamun ana (dictionary utawa dhaptar) |
+| dibusake(dict, kunci) | Nggusakake kunci; ngasilake nilai sing dibuwang |
+
+```jna
+ngomong dawa("Sugeng")
+ngomong dadi_angka("42") + 8
+ngomong pangkat(2, 10)
+```
+
+Argumen sing salah jumlah utawa jinis metu error JNA sing jelas karo nomer baris.
+Kesalahan keluar metu error JNA sing jelas karo nomer baris.
+
+## Pengujian
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Struktur kode
+
+```
+src/jna/
+  cli.py          # Titik masuk CLI
+  lexer.py        # Tokenizer lan keyword
+  parser.py       # Parser lan node AST
+  interpreter.py  # Evaluasi program
+  runtime.py      # Environment lan error runtime
+  functions.py    # JNAFunction lan NativeFunction
+  stdlib/         # 21 fungsi built-in lan registry
+```
+
+## Roadmap
+
+1. Fase 1 (bahasa inti) umume wis ana; error runtime durung kabeh
+   nduweni nomer baris.
+2. Fase 4 wis rampung; Fase 5 terus: dhaptar, dictionary, string
+   interpolation, lan module (`ngunduh`) wis ana; berkas, exception,
+   class, lan type system isih ing antrean.
+3. Compiler durung ana; pangembangan dimulai sawise interpreter stabil.
+   Packaging (pyproject.toml), LICENSE, lan docs/ wis ana.

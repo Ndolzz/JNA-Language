@@ -1,0 +1,2 @@
+[console_scripts]
+jna = jna.cli:main
